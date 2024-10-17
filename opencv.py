@@ -4,11 +4,11 @@ import serial
 import time
 
 # 初始化串口通信（根据实际的串口号和波特率设置）
-# ser = serial.Serial('COM6', 9600, timeout=1)  # 如果在Linux上，可能是 '/dev/ttyUSB0'
+ser = serial.Serial('COM6', 9600, timeout=1)  # 如果在Linux上，可能是 '/dev/ttyUSB0'
 time.sleep(2)  # 给串口一些初始化时间
 
 # 初始化摄像头
-# cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)
 
 # 设置字体
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -30,10 +30,10 @@ kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (8, 8))
 
 while True:
     # 读取摄像头帧
-    # ret, frame = cap.read()
-    frame=cv2.imread("C:/Users/L3101/Pictures/Camera Roll/WIN_20241015_23_28_15_Pro.jpg")
-    # if not ret:
-    #     break
+    ret, frame = cap.read()
+    # frame=cv2.imread("C:/Users/L3101/Pictures/Camera Roll/WIN_20241015_23_28_15_Pro.jpg")
+    if not ret:
+        break
     height, width = frame.shape[:2]
     x1, y1, x2, y2 = width // 4, height // 4, 3 * width // 4, 3 * height // 4
 
@@ -53,17 +53,17 @@ while True:
     # 合并左右分割结果
     combined_result = cv2.addWeighted(left_result, 1, right_result, 1, 0)
 
+    # 去除噪点 - 应用开运算
+    combined_result = cv2.morphologyEx(combined_result, cv2.MORPH_OPEN, kernel)
     # 二值化
     _, combined_result = cv2.threshold(combined_result, 127, 255, cv2.THRESH_BINARY)
 
-    # 去除噪点 - 应用开运算
-    combined_result = cv2.morphologyEx(combined_result, cv2.MORPH_OPEN, kernel)
 
     # 检测边缘
     edges = cv2.Canny(roi, 50, 150, apertureSize=3)
 
     # 霍夫变换检测直线
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=220,minLineLength=100,maxLineGap=100)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=150,minLineLength=50,maxLineGap=300)
 
     # 绘制检测到的直线并计算斜率
     if lines is not None:
@@ -89,9 +89,10 @@ while True:
                 print(f"{slope:.0f}")
 
                 # 将斜率发送到串口
-                # ser.write(b'\x03')
-                # ser.write(f'{slope:.0f}'.encode())
-                # ser.write(b'\xFE')
+                ser.write(b'\x03')
+                ser.write(f'{slope:.0f}\n'.encode())
+                ser.write(f'{slope:.0f}\n'.encode())#\n结尾
+                ser.write(b'\xFE')
 
             # 在原图上绘制直线
             cv2.line(roi, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -106,10 +107,10 @@ while True:
         break
 
 # 关闭串口
-# ser.close()
+ser.close()
 
 # 释放摄像头和关闭窗口
-# cap.release()
+cap.release()
 cv2.destroyAllWindows()
 
 
