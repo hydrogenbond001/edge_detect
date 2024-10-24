@@ -93,7 +93,7 @@ def capture_and_process(cap, ser, left_lower_hsv, left_upper_hsv, right_lower_hs
 # 主函数
 def main():
     # 初始化串口和摄像头
-    ser = init_serial('COM6', 9600)  # 根据实际串口号设置
+    # ser = init_serial('COM6', 9600)  # 根据实际串口号设置
     cap = init_camera(0)
     flag=0
     # HSV颜色范围
@@ -112,8 +112,8 @@ def main():
 
         # 处理图像，检测直线
         roi, combined_result, edges, lines = process_frame(frame, left_lower_hsv, left_upper_hsv, right_lower_hsv, right_upper_hsv, kernel)
-        if lines is not None:
-            send_slope_data(ser, lines, roi)
+        # if lines is not None:
+        #     send_slope_data(ser, lines, roi)
 
 
         # 显示结果
@@ -123,18 +123,18 @@ def main():
 
 
         # 读取串口接收到的数据
-        if ser.in_waiting > 0:
-            # 读取串口接收到的字符
-            flag = ser.read().decode('utf-8')
+        # if ser.in_waiting > 0:
+        #     # 读取串口接收到的字符
+        #     flag = ser.read().decode('utf-8')
 
         # 当接收到字符 'a' 时开始运行图像处理
         if flag == 'a':
             print("Received 'a', starting image processing...")
             # capture_and_process(cap, ser, left_lower_hsv, left_upper_hsv, right_lower_hsv, right_upper_hsv, kernel)
             # 发送斜率数据到串口
-            if lines is not None:
-                send_slope_data(ser, lines, roi)
-            flag=0
+            # if lines is not None:
+            #     send_slope_data(ser, lines, roi)
+            # flag=0
         
 
 
@@ -143,7 +143,7 @@ def main():
             break
 
     # 关闭串口和摄像头
-    ser.close()
+    # ser.close()
     cap.release()
     cv2.destroyAllWindows()
 

@@ -57,6 +57,6 @@ def main(input_dir,output_dir):
 
 
 if __name__ == "__main__":
-    input_dir = "./datasets/coco128/images/train2016"       # 读取图片目录表
-    output_dir = "./datasets/coco128/images/train2017"   # 保存截取的图像目录
+    input_dir = ""       # 读取图片目录表
+    output_dir = ""   # 保存截取的图像目录
     main(input_dir, output_dir)
