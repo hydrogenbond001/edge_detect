@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # 读取图像
-image = cv2.imread(r'C:\Users\L3101\Pictures\tu.jpg')  # 替换为你的图像文件路径
+image = cv2.imread(r'C:\Users\L3101\Pictures\Camera Roll\1245.png')  # 替换为你的图像文件路径
 if image is None:
     print("Image not found!")
     exit()
