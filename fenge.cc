@@ -3,7 +3,7 @@
 
 int main() {
     // 读取图像
-    cv::Mat frame = cv::imread("C:\Users\L3101\Pictures\Camera Roll/1245.png        ");
+    cv::Mat frame = cv::imread("C:\Users\L3101\Pictures\Camera Roll/1245.png");
     if (frame.empty()) {
         std::cerr << "Could not open or find the image!" << std::endl;
         return -1;
