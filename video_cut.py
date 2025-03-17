@@ -2,8 +2,8 @@ import cv2
 import os
 
 # 定义视频路径和自建目录名称
-video_path = r'C:\Users\L3101\Pictures\Camera Roll\output.mp4'
-output_dir = r'C:\Users\L3101\Pictures\Camera Roll\cut115'  # 自定义的目录名称
+video_path = r'C:\Users\L3101\Desktop\fsdownload\output.mp4'
+output_dir = r'C:\Users\L3101\Desktop\fsdownload\cut1'  # 自定义的目录名称
 
 # 检查并创建自定义目录
 if not os.path.exists(output_dir):
@@ -17,7 +17,7 @@ if not cap.isOpened():
     print(f"无法打开视频文件: {video_path}")
 else:
     # 定义每隔多少帧保存一次图片
-    frame_interval = 1  # 每1帧保存一次
+    frame_interval = 10  # 每1帧保存一次
     current_frame = 0
 
     while True:
