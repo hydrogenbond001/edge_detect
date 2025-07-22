@@ -7,7 +7,7 @@ def detect_lines_and_calculate_slope(image_path):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # 2. 高斯滤波去噪
-    blurred = cv2.GaussianBlur(gray, (7Q, 5), 0)
+    blurred = cv2.GaussianBlur(gray, (7, 5), 0)
 
     # 3. 使用Canny边缘检测
     edges = cv2.Canny(blurred, 100, 150)
@@ -50,5 +50,5 @@ def detect_lines_and_calculate_slope(image_path):
     return avg_slope
 
 # 调用函数并传入图像路径
-image_path = 'C:/Users/L3101/Pictures/Camera Roll/1245.png'  # 替换为实际的图像路径
+image_path = r'C:\Users\L3101\Pictures\Camera Roll\newcut\frame_100.jpg'  # 替换为实际的图像路径
 average_slope = detect_lines_and_calculate_slope(image_path)

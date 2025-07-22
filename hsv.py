@@ -1,50 +1,64 @@
 import cv2
 import numpy as np
 
-# 打开摄像头
-cap = cv2.VideoCapture(0)
+def process_frame(frame):
+    height, width = frame.shape[:2]
 
-if not cap.isOpened():
-    print("无法打开摄像头")
-    exit()
+    # ROI 区域
+    x1 = width // 3
+    y1 = height // 8
+    x2 = 3 * width // 4
+    y2 = 3 * height // 4
+    roi = frame[y1:y2, x1:x2]
 
-while True:
-    # 读取摄像头的一帧
-    ret, frame = cap.read()
+    # 转 HSV
+    hsv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    h,s,v= cv2.split(hsv_image)
+    h_colored = cv2.applyColorMap(h, cv2.COLORMAP_HSV)
+    # 二值化 (HSV → BGR → 灰度 → 二值)
+    bina = cv2.threshold(h_colored, 59, 255, cv2.THRESH_BINARY)[1]
+    gray = cv2.cvtColor(bina, cv2.COLOR_BGR2GRAY)
 
-    if not ret:
-        print("无法获取摄像头帧")
-        break
+    # 模糊
+    blurred = cv2.GaussianBlur(gray, (1, 1), 0)
 
-    # 将图像从BGR转换为HSV
-    hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    # 边缘检测
+    edges = cv2.Canny(blurred, 70, 150)
 
-    # 计算每个通道的平均值
-    avg_h = np.mean(hsv_frame[:, :, 0])  # H通道平均值
-    avg_s = np.mean(hsv_frame[:, :, 1])  # S通道平均值
-    avg_v = np.mean(hsv_frame[:, :, 2])  # V通道平均值
+    # 霍夫直线检测
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 720, 160, minLineLength=100, maxLineGap=60)
+    if lines is not None:
+        for line in lines:
+            x1_, y1_, x2_, y2_ = line[0]
+            cv2.line(frame, (x1_, y1_), (x2_, y2_), (0, 255, 0), 2)
 
-    # 打印平均HSV值
-    print(f"图像的平均HSV值为: H={avg_h:.2f}, S={avg_s:.2f}, V={avg_v:.2f}")
+    # 显示图像
+    cv2.imshow("Edges", edges)
+    cv2.imshow("bina", bina)
+    # cv2.imshow("roi", roi)
+    cv2.imshow("frame", frame)
+    # print(h,s,v)
+    # print(bina.shape) #(1069, 1903, 3)
+    
+    # np.savetxt("bina_pixels.txt", bina, fmt='%3d')
+    # print("bina 图像像素值已保存到 'bina_pixels.txt'")
+    
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-    # 在图像上显示平均HSV值
-    avg_hsv_text = f"Avg HSV: H={avg_h:.2f}, S={avg_s:.2f}, V={avg_v:.2f}"
-    cv2.putText(frame, avg_hsv_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+# ========= 主函数区域 =========
 
-    # 显示当前帧
-    cv2.imshow('Camera Feed with Avg HSV', frame)
+if __name__ == "__main__":
+    # 读取图像
+    img = cv2.imread("5678.png")  # 改成你上传的图片路径
 
-    # 按 'q' 键退出
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# 释放摄像头资源并关闭所有窗口
-cap.release()
-cv2.destroyAllWindows()
+    if img is None:
+        print("无法读取图片，请检查路径")
+        exit()
 
 
+    # 核，用于腐蚀/膨胀等操作
+    kernel = np.ones((3, 3), np.uint8)
 
-
-
-# Right HSV: H=58.84, S=13.42, V=169.29
-# Left HSV: H=34.30, S=16.12, V=174.51
+    process_frame(img)
+    

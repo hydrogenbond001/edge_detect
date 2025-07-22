@@ -34,7 +34,7 @@ def preprocess_image(img):
 
     # Apply adaptive gamma correction
     avg_brightness = np.mean(v_filtered) / 255.0
-    gamma = 1.5 if avg_brightness < 0.5 else 0.7            #gamma = 0.5时试试理解这里
+    gamma = 0.3 if avg_brightness < 0.3 else 0.4            #gamma = 0.5时试试理解这里
     v_corrected = gamma_correction(v_filtered.astype(np.uint8), gamma)
 
     # Merge the corrected V channel back
@@ -47,7 +47,7 @@ def detect_guideline(img):
     x1, y1, x2, y2 = width // 3, height // 8, 3 * width // 4, 3 * height // 4
     roi = img[y1:y2, x1:x2]
     
-    img=cv2.GaussianBlur(roi, (7,7), 0)
+    img=cv2.GaussianBlur(roi, (3,3), 0)
     # Edge detection using Canny
     edges = cv2.Canny(img, 50, 150)
     #edges = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, (7,7))
@@ -93,4 +93,5 @@ def process_agv_image(img_path):
     cv2.destroyAllWindows()
 
 # Run the function with a sample image path
-process_agv_image(r'C:\Users\L3101\Pictures\Camera Roll\1245.png')
+process_agv_image(r'C:\Users\L3101\Pictures\1111.png')
+# process_agv_image(r'C:\Users\L3101\Pictures\Camera Roll\1245.png')

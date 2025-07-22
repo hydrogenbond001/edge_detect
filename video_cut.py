@@ -1,9 +1,9 @@
 import cv2
 import os
 
-# 定义视频路径和自建目录名称
-video_path = r'C:\Users\L3101\Desktop\fsdownload\output.mp4'
-output_dir = r'C:\Users\L3101\Desktop\fsdownload\cut1'  # 自定义的目录名称
+# 定义视频路径和自建目录名称C:\Users\L3101\Pictures\Camera Roll
+video_path = r'C:\Users\L3101\Pictures\lqj002.mp4'
+output_dir = r'C:\Users\L3101\Pictures\Camera Roll\5.25_cut2'  # 自定义的目录名称
 
 # 检查并创建自定义目录
 if not os.path.exists(output_dir):
@@ -17,7 +17,7 @@ if not cap.isOpened():
     print(f"无法打开视频文件: {video_path}")
 else:
     # 定义每隔多少帧保存一次图片
-    frame_interval = 10  # 每1帧保存一次
+    frame_interval = 9  # 每1帧保存一次
     current_frame = 0
 
     while True:
@@ -29,7 +29,7 @@ else:
         # 如果当前帧是我们想要保存的，保存成图片到指定目录
         if current_frame % frame_interval == 0:
             # 使用零填充到5位数，例如: frame_00001.jpg
-            image_name = f'{output_dir}/frame_{current_frame:05d}.jpg'
+            image_name = f'{output_dir}/frame430_{current_frame:05d}.jpg'# frame_ frame1_ ...
             cv2.imwrite(image_name, frame)
             print(f'Saved: {image_name}')
         
