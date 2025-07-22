@@ -50,13 +50,14 @@ def process_frame(frame):
 
 if __name__ == "__main__":
     # 读取图像
-    img = cv2.imread("5678.png")  # 改成你上传的图片路径
+    img = cv2.imread(r"C:\Users\L3101\Pictures\722.png")  # 改成你上传的图片路径
 
     if img is None:
         print("无法读取图片，请检查路径")
         exit()
 
-
+    img = cv2.resize(img, (720, 480))
+    
     # 核，用于腐蚀/膨胀等操作
     kernel = np.ones((3, 3), np.uint8)
 
