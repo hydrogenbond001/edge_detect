@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\line.dir/objects.a
+C:\w64devkit\bin\ar.exe qc CMakeFiles\line.dir/objects.a @CMakeFiles\line.dir\objects1.rsp
+C:\w64devkit\bin\g++.exe  -Wl,--subsystem,console -Wl,--whole-archive CMakeFiles\line.dir/objects.a -Wl,--no-whole-archive -o line.exe -Wl,--out-implib,libline.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\line.dir\linkLibs.rsp

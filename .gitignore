@@ -1,0 +1,6 @@
+/opencv*/
+
+__pycache__
+*swp
+core*
+static/results

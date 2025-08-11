@@ -1,0 +1,1 @@
+g++ -O3 -std=c++11 test.cpp array/Array/Array.cpp edlines/edlines.cpp c66/VXLIB_sobel_3x3_i8u_o16s_o16s_cn.c -o test -Iedlines/ -Ic66/ -Iarray -IC:/opencv/build/include -LC:/opencv/build/x64/vc16/lib  -lopencv_world4100
